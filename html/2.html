@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IndusInd Bank - Card Services</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8f8f8; }
+        .header-bar { background: #832625; padding: 10px 0; text-align: center; }
+        .header-bar img { height: 36px; }
+
+        .slider-section { background: #fff; }
+        .slider-wrapper { display: flex; transition: transform 1s ease; overflow: hidden; }
+        .slider-wrapper div { min-width: 100%; }
+        .slider-wrapper img { width: 100%; height: auto; display: block; }
+
+        .content { padding: 15px; background: #fff; border-bottom: 3px solid #832625; }
+        .content h3 { color: #832625; font-weight: 700; font-size: 1.2rem; text-align: center; margin: 0; }
+
+        .card-grid { padding: 15px; max-width: 500px; margin: 0 auto; }
+        .card-item { background: #fff; border: 1px solid #eee; border-radius: 10px; overflow: hidden; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; padding: 12px; }
+        .card-item img { width: 50px; height: 50px; object-fit: contain; margin-right: 12px; }
+        .card-item .info { flex: 1; }
+        .card-item .info h4 { font-size: 0.95rem; font-weight: 600; color: #333; margin: 0 0 2px; }
+        .card-item .info p { font-size: 0.75rem; color: #888; margin: 0; }
+        .card-item .apply-btn { background: #832625; color: #fff; border: none; padding: 7px 18px; border-radius: 5px; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+        .card-item .apply-btn:hover { background: #6d1a15; }
+
+        .footer-text { text-align: center; padding: 15px; font-size: 0.75rem; color: #999; }
+    </style>
+</head>
+<body>
+
+<div class="header-bar">
+    <img src="../images/logo.jpeg" alt="IndusInd Bank">
+</div>
+
+<div class="slider-section">
+    <div class="slider-wrapper" id="slider">
+        <div><img src="../images/credit1.jpeg" alt="Offer 1"></div>
+        <div><img src="../images/credit2.jpeg" alt="Offer 2"></div>
+    </div>
+</div>
+
+<div class="content">
+    <h3>Select Card Service</h3>
+</div>
+
+<div class="card-grid" id="cardList"></div>
+
+<p class="footer-text">&copy; 2026 IndusInd Bank Ltd. All rights reserved.</p>
+
+<script>
+const cards = [
+    { title: "Apply New Card", desc: "Get a new credit card", img: "../images/c66.jpeg" },
+    { title: "Reward Points", desc: "Check your reward points", img: "../images/c66.jpeg" },
+    { title: "Annual Charges", desc: "View annual fee details", img: "../images/c66.jpeg" },
+    { title: "Limit Increase", desc: "Request credit limit increase", img: "../images/c66.jpeg" },
+    { title: "Separate Merged Cards", desc: "Split merged card accounts", img: "../images/c66.jpeg" },
+    { title: "Instant Loan", desc: "Get loan on your card", img: "../images/c66.jpeg" },
+    { title: "Card Activation", desc: "Activate your new card", img: "../images/c66.jpeg" },
+    { title: "Card Block", desc: "Block lost/stolen card", img: "../images/c66.jpeg" },
+    { title: "Card Protection Plan", desc: "Deactivate card insurance", img: "../images/c66.jpeg" }
+];
+
+const container = document.getElementById('cardList');
+cards.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'card-item';
+    div.innerHTML = '<img src="'+c.img+'" alt="'+c.title+'"><div class="info"><h4>'+c.title+'</h4><p>'+c.desc+'</p></div><button class="apply-btn" onclick="window.location.href=\'3.html\'">Proceed</button>';
+    container.appendChild(div);
+});
+
+let currentIndex = 0;
+const slider = document.getElementById('slider');
+const slides = document.querySelectorAll('.slider-wrapper div');
+setInterval(() => {
+    currentIndex = (currentIndex + 1) % slides.length;
+    slider.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+}, 3000);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

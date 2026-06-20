@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IndusInd Bank - Cards, Loans, Accounts, Personal &amp; NRI Banking Online</title>
+    <meta name="theme-color" content="#832625">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --maroon: #832625; --maroon-dark: #6d1a15; --gold: #c59d5f; --beige: #EDE6DE; --gold-line: #fd9907; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Source Sans 3', 'Segoe UI', Roboto, sans-serif; font-size: 1rem; font-weight: 400; line-height: 1.7; color: #2b2926; background: #fff; margin: 0; }
+
+        .top-bar { background: #832625; padding: 6px 0; font-size: 0.78rem; }
+        .top-bar a { color: rgba(255,255,255,0.85); text-decoration: none; margin-right: 18px; }
+        .top-bar a:hover { color: #fff; }
+        .top-bar .phone { color: #fff; font-weight: 600; }
+
+        .main-header { background: #fff; padding: 8px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .main-header .logo img { height: 48px; }
+
+        .nav-bar { background: #832625; }
+        .nav-bar .nav-link { color: #fff !important; font-weight: 500; font-size: 0.85rem; padding: 12px 18px !important; letter-spacing: 0.3px; position: relative; }
+        .nav-bar .nav-link:hover, .nav-bar .nav-link.active { background: rgba(0,0,0,0.15); }
+        .nav-bar .nav-link.login-btn { background: #fff; color: #832625 !important; border-radius: 4px; margin: 6px 0; padding: 8px 25px !important; font-weight: 600; }
+        .nav-bar .nav-link.login-btn:hover { background: #f0f0f0; }
+
+        .hero-section { background: #832625; position: relative; overflow: hidden; }
+        .hero-section .carousel-item { height: 380px; }
+        .hero-section .carousel-item img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(131,38,37,0.9) 0%, rgba(131,38,37,0.3) 60%, transparent 100%); z-index: 1; }
+        .hero-content { position: absolute; top: 50%; left: 6%; transform: translateY(-50%); z-index: 2; color: #fff; max-width: 520px; }
+        .hero-content h1 { font-weight: 800; font-size: 2.2rem; margin-bottom: 10px; }
+        .hero-content p { font-size: 1.05rem; opacity: 0.92; margin-bottom: 20px; }
+        .hero-content .btn-gold { background: #fff; color: #832625; padding: 10px 28px; border-radius: 4px; font-weight: 600; font-size: 0.9rem; text-decoration: none; display: inline-block; }
+        .hero-content .btn-gold:hover { background: #f0f0f0; }
+
+        .section-title { text-align: center; margin-bottom: 30px; }
+        .section-title h2 { color: #832625; font-weight: 700; font-size: 1.4rem; position: relative; display: inline-block; padding-bottom: 8px; }
+        .section-title h2::after { content: ''; display: block; width: 50px; height: 3px; background: #fd9907; margin: 6px auto 0; }
+
+        .quick-links { background: #fff; padding: 20px 0; border-bottom: 3px solid #832625; }
+        .quick-link-item { text-align: center; text-decoration: none; color: #444; padding: 10px 5px; display: block; transition: 0.3s; }
+        .quick-link-item:hover { color: #832625; transform: translateY(-3px); }
+        .quick-link-item .icon { width: 50px; height: 50px; background: #EDE6DE; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 1.3rem; color: #832625; }
+        .quick-link-item span { font-size: 0.78rem; font-weight: 500; }
+
+        .products-section { padding: 40px 0; background: #fff; }
+        .product-card { background: #f8f9fa; border-radius: 8px; padding: 20px 15px; text-align: center; text-decoration: none; color: #444; display: block; height: 100%; border: 1px solid #eee; transition: 0.3s; }
+        .product-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); border-color: #832625; }
+        .product-card .icon { font-size: 1.8rem; color: #832625; margin-bottom: 8px; }
+        .product-card h6 { font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; }
+        .product-card p { font-size: 0.72rem; color: #777; margin: 0; }
+
+        .offers-section { padding: 40px 0; background: #EDE6DE; }
+        .offer-card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.06); height: 100%; transition: 0.3s; }
+        .offer-card:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .offer-card img { width: 100%; height: 170px; object-fit: cover; }
+        .offer-card-body { padding: 15px; }
+        .offer-card-body h6 { font-weight: 600; color: #832625; font-size: 0.9rem; }
+        .offer-card-body p { font-size: 0.78rem; color: #666; }
+        .offer-card-body a { color: #832625; font-weight: 600; font-size: 0.78rem; text-decoration: none; }
+
+        .footer { background: #832625; color: #dadada; padding: 35px 0 15px; font-size: 0.88rem; }
+        .footer h6 { color: #fff; font-weight: 600; font-size: 0.85rem; margin-bottom: 12px; }
+        .footer a { color: #dadada; text-decoration: none; font-size: 0.8rem; display: block; margin-bottom: 4px; transition: 0.3s; }
+        .footer a:hover { color: #fff; }
+        .footer-divider { border-color: rgba(255,255,255,0.12); margin: 20px 0; }
+        .footer-bottom { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+        .footer-bottom a { display: inline; margin-right: 12px; color: rgba(255,255,255,0.6); }
+        .footer-bottom a:hover { color: #fff; }
+        .social-icons a { display: inline-block; margin-right: 10px; font-size: 1.1rem; color: #dadada; }
+        .social-icons a:hover { color: #fff; }
+
+        @media (max-width: 768px) {
+            .hero-section .carousel-item { height: 220px; }
+            .hero-content h1 { font-size: 1.3rem; }
+            .hero-content p { font-size: 0.85rem; }
+            .main-header .logo img { height: 35px; }
+            .nav-bar .nav-link { font-size: 0.72rem; padding: 8px 10px !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar d-none d-md-block">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <a href="#"><i class="fa-regular fa-circle-question me-1"></i> Log a Complaint</a>
+            <a href="#"><i class="fa-regular fa-location-dot me-1"></i> Locate Us</a>
+            <a href="#"><i class="fa-regular fa-envelope me-1"></i> Reach Us</a>
+        </div>
+        <div><span class="phone"><i class="fa-solid fa-phone me-1"></i> 1860 267 7777</span></div>
+    </div>
+</div>
+
+<div class="main-header">
+    <div class="container d-flex justify-content-between align-items-center">
+        <a href="/" class="logo">
+            <img src="images/logo.jpeg" alt="IndusInd Bank">
+        </a>
+        <div class="d-flex align-items-center gap-2">
+            <a href="#" class="text-secondary me-3"><i class="fa-solid fa-magnifying-glass"></i></a>
+            <a href="#" class="text-secondary me-3"><i class="fa-regular fa-location-dot"></i></a>
+        </div>
+    </div>
+</div>
+
+<div class="nav-bar">
+    <div class="container">
+        <ul class="nav justify-content-center flex-nowrap">
+            <li class="nav-item"><a class="nav-link active" href="/">PERSONAL</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">PIONEER PRIVATE</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">PIONEER</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">NRI</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">BUSINESS</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">CORPORATE</a></li>
+            <li class="nav-item"><a class="nav-link login-btn" href="html/index.html"><i class="fa-regular fa-user me-2"></i>LOGIN</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="hero-section">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="images/c1.jpeg" alt="Digital Banking">
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                    <h1>Welcome to IndusInd Bank</h1>
+                    <p>Experience the future of banking with our digital solutions. Secure, fast, and available 24/7.</p>
+                    <a href="html/index.html" class="btn-gold">Login to NetBanking</a>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="images/c2.jpeg" alt="Credit Cards">
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                    <h1>Exclusive Credit Card Offers</h1>
+                    <p>Unlock rewards, cashback, and privileges designed for your lifestyle.</p>
+                    <a href="html/index.html" class="btn-gold">Apply Now</a>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="images/c3.jpeg" alt="Home Loans">
+                <div class="hero-overlay" style="background: linear-gradient(90deg, rgba(131,38,37,0.85) 0%, rgba(131,38,37,0.25) 50%, transparent 100%);"></div>
+                <div class="hero-content">
+                    <h1>Home Loans Starting at 8.5%</h1>
+                    <p>Make your dream home a reality with affordable EMI options.</p>
+                    <a href="html/index.html" class="btn-gold">Check Eligibility</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="quick-links">
+    <div class="container">
+        <div class="row g-2">
+            <div class="col-4 col-md-2"><a href="html/index.html" class="quick-link-item"><div class="icon"><i class="fa-regular fa-building-columns"></i></div><span>Open Account</span></a></div>
+            <div class="col-4 col-md-2"><a href="html/index.html" class="quick-link-item"><div class="icon"><i class="fa-regular fa-credit-card"></i></div><span>Credit Card</span></a></div>
+            <div class="col-4 col-md-2"><a href="html/index.html" class="quick-link-item"><div class="icon"><i class="fa-solid fa-hand-hold-dollar"></i></div><span>Personal Loan</span></a></div>
+            <div class="col-4 col-md-2"><a href="html/index.html" class="quick-link-item"><div class="icon"><i class="fa-solid fa-house-chimney"></i></div><span>Home Loan</span></a></div>
+            <div class="col-4 col-md-2"><a href="html/index.html" class="quick-link-item"><div class="icon"><i class="fa-solid fa-car"></i></div><span>Car Loan</span></a></div>
+            <div class="col-4 col-md-2"><a href="html/index.html" class="quick-link-item"><div class="icon"><i class="fa-solid fa-coins"></i></div><span>Fixed Deposit</span></a></div>
+        </div>
+    </div>
+</div>
+
+<div class="products-section">
+    <div class="container">
+        <div class="section-title"><h2>Explore Our Products</h2></div>
+        <div class="row g-3">
+            <div class="col-6 col-md-3"><a href="html/index.html" class="product-card"><div class="icon"><i class="fa-regular fa-building-columns"></i></div><h6>Savings Account</h6><p>Open a savings account with ease</p></a></div>
+            <div class="col-6 col-md-3"><a href="html/index.html" class="product-card"><div class="icon"><i class="fa-regular fa-credit-card"></i></div><h6>Credit Cards</h6><p>Explore our range of credit cards</p></a></div>
+            <div class="col-6 col-md-3"><a href="html/index.html" class="product-card"><div class="icon"><i class="fa-solid fa-hand-hold-dollar"></i></div><h6>Personal Loan</h6><p>Get instant personal loan approval</p></a></div>
+            <div class="col-6 col-md-3"><a href="html/index.html" class="product-card"><div class="icon"><i class="fa-solid fa-house-chimney"></i></div><h6>Home Loan</h6><p>Attractive interest rates on home loans</p></a></div>
+            <div class="col-6 col-md-3"><a href="html/index.html" class="product-card"><div class="icon"><i class="fa-solid fa-coins"></i></div><h6>Fixed Deposit</h6><p>Highest FD rates in the market</p></a></div>
+            <div class="col-6 col-md-3"><a href="html/index.html" class="product-card"><div class="icon"><i class="fa-solid fa-car"></i></div><h6>Car Loan</h6><p>Drive home your dream car</p></a></div>
+            <div class="col-6 col-md-3"><a href="html/index.html" class="product-card"><div class="icon"><i class="fa-solid fa-indian-rupee-sign"></i></div><h6>Current Account</h6><p>Tailored for your business needs</p></a></div>
+            <div class="col-6 col-md-3"><a href="html/index.html" class="product-card"><div class="icon"><i class="fa-solid fa-shield"></i></div><h6>Insurance</h6><p>Protect what matters most</p></a></div>
+        </div>
+    </div>
+</div>
+
+<div class="offers-section">
+    <div class="container">
+        <div class="section-title"><h2>Latest Offers</h2></div>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="offer-card">
+                    <img src="images/04.jpeg" alt="Credit Card Offer">
+                    <div class="offer-card-body">
+                        <h6>Credit Card Reward Points</h6>
+                        <p>Earn up to 5x reward points on every transaction. Redeem for exciting gifts and vouchers.</p>
+                        <a href="html/index.html">Know More <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="offer-card">
+                    <img src="images/images.jpeg" alt="Home Loan Offer">
+                    <div class="offer-card-body">
+                        <h6>Home Loan at 8.50% p.a.</h6>
+                        <p>Avail home loans at attractive interest rates with minimal documentation.</p>
+                        <a href="html/index.html">Know More <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="offer-card">
+                    <img src="images/maxresdefault.jpg" alt="Personal Loan Offer">
+                    <div class="offer-card-body">
+                        <h6>Instant Personal Loan</h6>
+                        <p>Get pre-approved personal loan in minutes. Amount up to Rs. 25 Lakhs.</p>
+                        <a href="html/index.html">Know More <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-6 col-md-3">
+                <h6>About Us</h6>
+                <a href="#">Company</a>
+                <a href="#">Awards</a>
+                <a href="#">Investor Relations</a>
+                <a href="#">Media &amp; Brands</a>
+                <a href="#">Careers</a>
+            </div>
+            <div class="col-6 col-md-3">
+                <h6>Customer Service</h6>
+                <a href="#">Contact Us</a>
+                <a href="#">Locate Us</a>
+                <a href="#">Forms &amp; Documents</a>
+                <a href="#">Schedule of Charges</a>
+                <a href="#">Grievance Redressal</a>
+            </div>
+            <div class="col-6 col-md-3">
+                <h6>Calculators</h6>
+                <a href="#">EMI Calculator</a>
+                <a href="#">Personal Loan EMI</a>
+                <a href="#">FD Calculator</a>
+                <a href="#">SIP Calculator</a>
+                <h6 class="mt-3">Rates &amp; Charges</h6>
+                <a href="#">Interest Rates</a>
+                <a href="#">Schedule of Charges</a>
+            </div>
+            <div class="col-6 col-md-3">
+                <h6>Follow Us</h6>
+                <div class="social-icons mb-3">
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+                <h6>Registered Office</h6>
+                <p style="font-size:0.78rem; color:rgba(255,255,255,0.65); line-height:1.4;">
+                    IndusInd Bank Limited<br>
+                    2401 Gen. Thimmayya Road (Cantonment),<br>
+                    Pune-411 001, India.<br>
+                    Tel: 020-26343201
+                </p>
+            </div>
+        </div>
+        <hr class="footer-divider">
+        <div class="footer-bottom d-flex flex-wrap justify-content-between">
+            <div>
+                <a href="#">Terms &amp; Conditions</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Sitemap</a>
+            </div>
+            <div>Copyright &copy; 2026 IndusInd Bank. All rights reserved.</div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
