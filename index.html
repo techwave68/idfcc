@@ -84,12 +84,13 @@
 
         @media (max-width: 576px) {
             .nav-bar .container { padding: 0; overflow: hidden; }
-            .nav-bar .nav { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; justify-content: flex-start; padding: 0 4px; }
+            .nav-bar .nav { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; justify-content: flex-start; gap: 0; padding: 0 2px; }
             .nav-bar .nav::-webkit-scrollbar { display: none; }
             .nav-bar .nav-item { flex-shrink: 0; }
-            .nav-bar .nav-link { white-space: nowrap; font-size: 0.62rem; padding: 6px 8px !important; }
-            .nav-bar .nav-link.login-btn { padding: 4px 10px !important; font-size: 0.62rem; margin: 4px 0; }
-            .nav-bar .nav-link.login-btn i { margin-right: 2px !important; }
+            .nav-bar .nav-link { white-space: nowrap; font-size: 0.56rem; padding: 4px 6px !important; letter-spacing: 0.2px; }
+            .nav-bar .nav-link.login-btn { padding: 3px 8px !important; font-size: 0.58rem; margin: 3px 0; }
+            .nav-bar .nav-link.login-btn i { margin-right: 0 !important; }
+            .nav-bar .nav-link.login-btn { min-width: 0; }
             .main-header .container { padding: 8px 12px; }
             .main-header .logo img { height: 32px; }
         }
