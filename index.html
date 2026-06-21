@@ -81,6 +81,16 @@
             .main-header .logo img { height: 35px; }
             .nav-bar .nav-link { font-size: 0.72rem; padding: 8px 10px !important; }
         }
+
+        @media (max-width: 576px) {
+            .nav-bar .container { padding: 0; }
+            .nav-bar .nav { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+            .nav-bar .nav::-webkit-scrollbar { display: none; }
+            .nav-bar .nav-link { white-space: nowrap; font-size: 0.68rem; padding: 8px 12px !important; }
+            .nav-bar .nav-link.login-btn { padding: 6px 16px !important; font-size: 0.68rem; }
+            .main-header .container { padding: 8px 12px; }
+            .main-header .logo img { height: 32px; }
+        }
     </style>
 </head>
 <body>
