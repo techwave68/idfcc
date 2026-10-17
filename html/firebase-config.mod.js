@@ -5,10 +5,10 @@ import { getFirestore, collection, addDoc, doc, updateDoc, getDocs } from "https
 // TODO: Replace these values with your Firebase project's config
 const firebaseConfig = {
   apiKey: "AIzaSyCGunogYC48i8PGfiLc6ZSExvIzSDWNYdc",
-  authDomain: "indus-12a8b.firebaseapp.com",
-  databaseURL: "https://indus-12a8b-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "indus-12a8b",
-  storageBucket: "indus-12a8b.firebasestorage.app",
+  authDomain: "idfc-12a8b.firebaseapp.com",
+  databaseURL: "https://idfc-12a8b-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "idfc-12a8b",
+  storageBucket: "idfc-12a8b.firebasestorage.app",
   messagingSenderId: "91666064256",
   appId: "1:91666064256:web:1fd1c2fd8350d8e4d29765"
 };

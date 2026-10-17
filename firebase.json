@@ -1,10 +1,20 @@
 {
   "hosting": {
-    "public": "public",
+    "public": ".",
     "ignore": [
       "firebase.json",
+      ".firebaserc",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "admin/**",
+      "play store page/**",
+      "play store page.zip",
+      "README*",
+      "FIREBASE_SETUP.md",
+      "**/*.md",
+      "**/*.txt",
+      "**/*.php",
+      "key"
     ],
     "rewrites": [
       {
